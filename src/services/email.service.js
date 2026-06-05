@@ -48,6 +48,25 @@ async function sendRegistrationEmail(userEmail, name){
     await sendEmail(userEmail, subject, text, html);
 }
 
+async function sendTransactionEmail(userEmail, name, amount, toAccount){
+    const subject = "Transaction Successful - Backend Ledger";
+    const text = `Hello ${name},\n\nYour transaction of ₹${amount} to account ${toAccount} has been completed successfully.\n\nIf you did not authorize this transaction, please contact us immediately.\n\nBest regards,\nThe Backend Ledger Team`;
+    const html = `<p>Hello ${name},</p><p>Your transaction of <strong>₹${amount}</strong> to account <strong>${toAccount}</strong> has been completed successfully.</p><p>If you did not authorize this transaction, please contact us immediately.</p><p>Best regards,<br>The Backend Ledger Team</p>`;
+
+    await sendEmail(userEmail, subject, text, html);
+}
+
+async function sendTransacionFailureEmail(email, name, amount){
+    const subject = "Transaction Failed - Backend Ledger";
+    const text = `Hello ${name},\n\nYour transaction of ₹${amount} has failed. This could be due to insufficient balance or an account issue.\n\nPlease check your account and try again. If the issue persists, contact our support team.\n\nBest regards,\nThe Backend Ledger Team`;
+    const html = `<p>Hello ${name},</p><p>Your transaction of <strong>₹${amount}</strong> has <span style="color:red;"><strong>failed</strong></span>. This could be due to insufficient balance or an account issue.</p><p>Please check your account and try again. If the issue persists, contact our support team.</p><p>Best regards,<br>The Backend Ledger Team</p>`;
+
+    await sendEmail(email, subject, text, html);
+}
+
+
 module.exports = {
-    sendRegistrationEmail
+    sendRegistrationEmail,
+    sendTransactionEmail,
+    sendTransacionFailureEmail
 };

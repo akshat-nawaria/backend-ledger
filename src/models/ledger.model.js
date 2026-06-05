@@ -23,7 +23,7 @@ const ledgerSchema = new mongoose.Schema({
     type:{
         type:String,
         enum:{
-            values : ["Credit", "Debit"],
+            values : ["CREDIT", "DEBIT"],
             message: "Type can either be Debit or Credit"
         },
         required : [true, "Ledger type is required"],
@@ -42,7 +42,9 @@ ledgerSchema.pre('updateOne', preventLedgerModification)
 ledgerSchema.pre('deleteOne', preventLedgerModification)
 ledgerSchema.pre('remove', preventLedgerModification)
 ledgerSchema.pre('deleteMany', preventLedgerModification)
-
+ledgerSchema.pre('updateMany', preventLedgerModification)
+ledgerSchema.pre('findOneAndDelete', preventLedgerModification)
+ledgerSchema.pre('findOneAndReplace', preventLedgerModification)
 
 const ledgerModel = mongoose.model("ledger", ledgerSchema);
 
