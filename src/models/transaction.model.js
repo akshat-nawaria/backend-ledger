@@ -21,7 +21,7 @@ const transactionSchema = new mongoose.Schema({
             values:["PENDING", "COMPLETED", "FAILED", "REVERSED"],
             message: "Status must be either Pending, Completed, Failed or Reversed"
         },
-        default: "Pending"
+        default: "PENDING"
     },
     amount:{
         type:Number,
