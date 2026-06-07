@@ -12,6 +12,11 @@ app.use(cookieParser());
 /**
  * - user routes
  */
+
+app.get("/", (req,res)=>{
+    res.send("Ledger server is up and running")
+})
+
 app.use("/api/auth", authRouter)
 app.use("/api/accounts", accountRouter)
 app.use("/api/transactions", transactionRouter)
