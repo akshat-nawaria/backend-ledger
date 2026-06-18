@@ -13,8 +13,10 @@ async function createAccountController(req, res) {
         }
 
         // 2. Create the account
+        const { name } = req.body;
         const account = await accountModel.create({
-            user: user._id
+            user: user._id,
+            name: name || "Standard Account"
         });
 
         // 3. Send success response
@@ -63,8 +65,45 @@ async function getAccountBalanceController(req,res){
     })
 }
 
+async function deleteAccountController(req,res){
+    const {accountId} = req.params;
+
+    try {
+        const account = await accountModel.findOne({
+            _id : accountId,
+            user : req.user._id
+        });
+
+        if(!account){
+            return res.status(400).json({
+                message : "Account not found or does not belong to you"
+            });
+        }
+
+        const balance = await account.getBalance();
+
+        if(balance > 0) {
+            return res.status(400).json({
+                message: "Cannot close account. Please transfer the remaining balance of ₹" + balance + " to another account first."
+            });
+        }
+
+        account.status = "CLOSED";
+        await account.save();
+
+        res.status(200).json({
+            message: "Account successfully closed",
+            account
+        });
+    } catch (error) {
+        console.error("Error closing account:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+}
+
 module.exports = {
     createAccountController,
     getUserAccountsController,
-    getAccountBalanceController
+    getAccountBalanceController,
+    deleteAccountController
 };

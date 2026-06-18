@@ -16,5 +16,10 @@ transactionRoutes.post("/", authMiddleware.authMiddleware, transactionController
  */
 transactionRoutes.post("/system/initial-funds", authMiddleware.authSystemUserMiddleware,  transactionController.createInitialFundsTransaction)
 
+/**
+ * - GET /api/transactions
+ * - Get all ledger entries for user's accounts
+ */
+transactionRoutes.get("/", authMiddleware.authMiddleware, transactionController.getUserLedgerEntries)
 
 module.exports = transactionRoutes;

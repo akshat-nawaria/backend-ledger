@@ -24,5 +24,10 @@ router.get("/", authMiddleware.authMiddleware, accountController.getUserAccounts
  */
 router.get("/balance/:accountId", authMiddleware.authMiddleware, accountController.getAccountBalanceController)
 
+/**
+ * - DELETE /api/accounts/:accountId
+ * - soft delete an account (set status to CLOSED)
+ */
+router.delete("/:accountId", authMiddleware.authMiddleware, accountController.deleteAccountController)
 
 module.exports = router

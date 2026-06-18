@@ -1,0 +1,502 @@
+/* ============================================
+   LedgerX Design System
+   Dual-Zone: Public (Light) + Private (Dark)
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+/* ── CSS Custom Properties ── */
+:root {
+  /* Public Zone Colors */
+  --surface: #fdf7ff;
+  --surface-dim: #ded8e0;
+  --surface-container: #f2ecf4;
+  --surface-container-low: #f8f2fa;
+  --surface-container-lowest: #ffffff;
+  --surface-container-high: #ece6ee;
+  --surface-variant: #e6e0e9;
+  --on-surface: #1d1b20;
+  --on-surface-variant: #494551;
+  --outline: #7a7582;
+  --outline-variant: #cbc4d2;
+
+  /* Brand */
+  --primary: #4f378a;
+  --primary-container: #6750a4;
+  --on-primary: #ffffff;
+  --on-primary-container: #e0d2ff;
+  --primary-accent: #635BFF;
+  --cyan-accent: #00D4FF;
+
+  /* Status */
+  --emerald: #10b981;
+  --rose: #f43f5e;
+  --amber: #f59e0b;
+
+  /* Private Zone Colors */
+  --private-bg: #0B0F1A;
+  --private-card: #1C2333;
+  --private-border: #2D3748;
+  --private-input: #111827;
+
+  /* Typography */
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* Spacing */
+  --gutter: 24px;
+  --margin-desktop: 64px;
+  --margin-mobile: 20px;
+  --container-max: 1200px;
+
+  /* Radius */
+  --radius-sm: 0.25rem;
+  --radius: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-full: 9999px;
+}
+
+/* ── Reset & Base ── */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--on-surface);
+  background: var(--surface);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: var(--font-family);
+}
+
+input, select, textarea {
+  font-family: var(--font-family);
+  outline: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* ── Typography ── */
+.text-hero {
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 56px;
+  letter-spacing: -0.02em;
+}
+
+.text-hero-mobile {
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 44px;
+}
+
+.text-section {
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 40px;
+  letter-spacing: -0.01em;
+}
+
+.text-body {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+.text-label {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* ── Layout Utilities ── */
+.container-max {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--margin-desktop);
+}
+
+/* ── Gradient Utilities ── */
+.gradient-text {
+  background: linear-gradient(135deg, var(--primary-accent) 0%, var(--cyan-accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.aurora-mesh {
+  background: radial-gradient(circle at 100% 0%, rgba(99, 91, 255, 0.2) 0%, transparent 50%),
+              radial-gradient(circle at 80% 50%, rgba(0, 212, 255, 0.13) 0%, transparent 40%),
+              radial-gradient(circle at 90% 100%, rgba(99, 91, 255, 0.13) 0%, transparent 50%);
+}
+
+.aurora-bg {
+  background: linear-gradient(135deg, #4f378a 0%, #63597c 50%, #e7c365 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.aurora-bg::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at center, transparent 0%, rgba(255, 255, 255, 0.1) 100%);
+  animation: aurora-rotate 20s linear infinite;
+}
+
+@keyframes aurora-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ── Glass Card ── */
+.glass-card {
+  background: rgba(28, 35, 51, 0.85);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(45, 55, 72, 0.5);
+}
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 32px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: var(--radius-full);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: var(--on-primary);
+  box-shadow: 0 4px 16px rgba(79, 55, 138, 0.2);
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: scale(0.97);
+}
+
+.btn-accent {
+  background: var(--primary-accent);
+  color: white;
+  font-weight: 700;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.btn-accent:hover {
+  filter: brightness(1.1);
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--outline-variant);
+  color: var(--on-surface);
+}
+
+.btn-ghost:hover {
+  background: var(--surface-container-low);
+}
+
+.btn-ghost-dark {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.btn-ghost-dark:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ── Form Inputs ── */
+.input-public {
+  width: 100%;
+  height: 48px;
+  padding: 0 16px;
+  border-radius: var(--radius);
+  background: var(--surface-container);
+  border: 1px solid var(--outline-variant);
+  color: var(--on-surface);
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.input-public:focus {
+  border-color: var(--primary-container);
+  box-shadow: 0 0 0 3px rgba(103, 80, 164, 0.15);
+}
+
+.input-private {
+  width: 100%;
+  height: 48px;
+  padding: 0 16px;
+  border-radius: var(--radius);
+  background: var(--private-input);
+  border: 1px solid var(--private-border);
+  color: #ffffff;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.input-private:focus {
+  border-color: var(--primary-accent);
+  box-shadow: 0 0 0 3px rgba(99, 91, 255, 0.2);
+}
+
+.input-private::placeholder {
+  color: var(--outline);
+}
+
+/* ── Cards ── */
+.card-public {
+  background: var(--surface-container-lowest);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  transition: all 0.3s ease;
+}
+
+.card-public:hover {
+  border-color: rgba(79, 55, 138, 0.4);
+}
+
+.card-private {
+  background: var(--private-card);
+  border: 1px solid var(--private-border);
+  border-radius: var(--radius-md);
+}
+
+/* ── Status Badges ── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge-active {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: var(--emerald);
+}
+
+.badge-frozen {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: var(--amber);
+}
+
+.badge-closed {
+  background: rgba(244, 63, 94, 0.1);
+  border: 1px solid rgba(244, 63, 94, 0.3);
+  color: var(--rose);
+}
+
+.badge-debit {
+  background: rgba(244, 63, 94, 0.1);
+  border: 1px solid rgba(244, 63, 94, 0.3);
+  color: var(--rose);
+}
+
+.badge-credit {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: var(--emerald);
+}
+
+.badge-pending {
+  background: rgba(122, 117, 130, 0.1);
+  border: 1px solid rgba(122, 117, 130, 0.3);
+  color: var(--outline);
+}
+
+.badge-completed {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: var(--emerald);
+}
+
+/* ── Password Strength Bar ── */
+.strength-bar {
+  height: 4px;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+/* ── Private Zone Sidebar ── */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 240px;
+  background: var(--surface-container-lowest);
+  border-right: 1px solid var(--outline-variant);
+  display: flex;
+  flex-direction: column;
+  padding: 24px 0;
+  z-index: 40;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  margin: 2px 8px;
+  border-radius: var(--radius);
+  color: var(--outline);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: all 0.15s ease;
+}
+
+.sidebar-link:hover {
+  background: var(--surface-container-high);
+  color: var(--on-surface);
+}
+
+.sidebar-link.active {
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+}
+
+/* ── Tabular Numerals (for financial data) ── */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Private Zone Table ── */
+.table-private {
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
+}
+
+.table-private th {
+  padding: 12px 24px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--outline);
+  background: rgba(11, 15, 26, 0.5);
+  border-bottom: 1px solid var(--private-border);
+}
+
+.table-private td {
+  padding: 12px 24px;
+  font-size: 14px;
+  border-bottom: 1px solid var(--private-border);
+}
+
+.table-private tr:hover {
+  background: rgba(11, 15, 26, 0.4);
+}
+
+/* ── Animations ── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.slide-in {
+  animation: slideIn 0.4s ease forwards;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.3); }
+  50% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s infinite;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .container-max {
+    padding: 0 var(--margin-mobile);
+  }
+
+  .text-hero {
+    font-size: 36px;
+    line-height: 44px;
+  }
+
+  .sidebar {
+    display: none;
+  }
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--outline-variant);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--outline);
+}

@@ -21,6 +21,10 @@ const accountSchema = new mongoose.Schema({
         type: String,
         required: [true, "Currency is required for creating an account"],
         default: "INR"
+    },
+    name:{
+        type: String,
+        default: "Standard Account"
     }
 },{
     timestamps: true

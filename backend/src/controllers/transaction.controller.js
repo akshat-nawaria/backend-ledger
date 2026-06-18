@@ -156,8 +156,8 @@ async function createTransaction(req, res) {
             type: "DEBIT"
         } ], { session })
 
-        // Simulating processing delay
-        await new Promise((resolve) => setTimeout(resolve, 15 * 100));
+        // Removed artificial delay to speed up response
+        // await new Promise((resolve) => setTimeout(resolve, 15 * 100));
 
         const creditLedgerEntry = await ledgerModel.create([ {
             account: toAccount,
@@ -176,9 +176,9 @@ async function createTransaction(req, res) {
         await session.commitTransaction()
         session.endSession()
 
-        // 10. Send email notification (Moved inside try block so it only sends on success)
+        // 10. Send email notification (Fire and forget, do not await to avoid blocking response)
         if (req.user && req.user.email) {
-            await emailService.sendTransactionEmail(req.user.email, req.user.name, amount, toAccount)
+            emailService.sendTransactionEmail(req.user.email, req.user.name, amount, toAccount).catch(console.error);
         }
 
         // Fetch the updated transaction to return back to user
@@ -316,7 +316,28 @@ async function createInitialFundsTransaction(req, res) {
 }
 
 
+/**
+ * - Get all ledger entries for the logged-in user
+ */
+async function getUserLedgerEntries(req, res) {
+    try {
+        const accounts = await accountModel.find({ user: req.user._id });
+        const accountIds = accounts.map(a => a._id);
+
+        const ledgers = await ledgerModel.find({ account: { $in: accountIds } })
+            .populate('transaction')
+            .sort({ _id: -1 })
+            .limit(100);
+
+        return res.status(200).json({ ledgers });
+    } catch (error) {
+        console.error("Error fetching ledger entries:", error);
+        return res.status(500).json({ message: "Failed to fetch ledger entries" });
+    }
+}
+
 module.exports = {
     createTransaction,
-    createInitialFundsTransaction
+    createInitialFundsTransaction,
+    getUserLedgerEntries
 }
