@@ -1,36 +1,55 @@
-# LedgerX — Financial Infrastructure & Core Banking
+# 🏦 LedgerX — Financial Infrastructure & Core Banking
 
-A robust full-stack application that serves as a core banking/ledger system. The backend implements advanced financial engineering concepts such as **Double-Entry Bookkeeping**, **ACID Transactions**, **Concurrency Locks**, and **Idempotency** to guarantee perfect data consistency. The frontend is a sleek, modern React application built with Vite, offering a premium user experience with public and private authentication zones.
+![LedgerX Banner](https://via.placeholder.com/1000x300/0b0f1a/ffffff?text=LedgerX+Financial+Infrastructure)
 
-## Features
+**LedgerX** is a highly robust, full-stack application that serves as a core banking and immutable ledger system. Engineered for absolute financial data integrity, it prevents race conditions, double-spending, and orphaned records using advanced computer science and database principles. 
 
-### Backend Architecture
-- **Double-Entry Bookkeeping:** Account balances are dynamically calculated `(Credits - Debits)` directly from an immutable ledger rather than being statically stored, eliminating data drift.
-- **ACID Transactions:** Utilizes MongoDB Sessions to ensure fund transfers are executed as atomic, all-or-nothing operations.
-- **Concurrency Control:** Implements pessimistic write locks (`findOneAndUpdate`) on user accounts to prevent race conditions during concurrent transaction processing.
-- **Idempotency:** API requires an `idempotencyKey` to safely handle network retries, completely preventing duplicate fund transfers.
-- **Immutable Audit Trail:** Strict Mongoose pre-hooks block any modifications or deletions to ledger entries.
-- **Asynchronous Communications:** Non-blocking email services via Nodemailer for instant API responses.
+The application is structured as a modern **Monorepo**, containing a secure Node.js backend API and a premium React/Vite frontend interface.
 
-### Frontend Experience
-- **Modern Tech Stack:** React, Vite, React Router DOM, Axios.
-- **Premium Design System:** Fully custom UI with public (light) and private (dark) zones, complete with CSS custom properties and micro-animations.
-- **Secure Authentication:** Context-based auth state management with JWT request/response interceptors and secure logout capabilities.
-- **Ledger Transparency:** Detailed, immutable transaction history tables showing real-time debits and credits.
+---
 
-## Technology Stack
+## ✨ Key Features & Architecture
 
-- **Frontend:** React, Vite, CSS3, Lucide Icons
-- **Backend:** Node.js, Express.js
-- **Database:** MongoDB, Mongoose
-- **Authentication:** JSON Web Tokens (JWT) & bcryptjs
-- **Services:** Nodemailer (Gmail OAuth2/App Passwords)
+### 🛡️ Backend & Core Banking Engine
+The backend doesn't just store balances; it *calculates* them dynamically to prevent database drift.
+- **Double-Entry Bookkeeping:** Account balances are not stored as static numbers. They are dynamically calculated `(Credits - Debits)` at runtime directly from an immutable ledger of transactions.
+- **ACID Transactions:** Powered by MongoDB Sessions, fund transfers are executed as strict atomic operations. If a transfer fails mid-way (e.g., server crash), the entire database rolls back to prevent "lost money".
+- **Pessimistic Concurrency Control:** Implements write locks (`findOneAndUpdate`) on user accounts during a transfer to completely eliminate race conditions and double-spending vulnerabilities.
+- **Idempotency:** The API strictly requires an `idempotencyKey` for every transaction. If a network timeout causes the frontend to retry a request, the backend recognizes the key and safely ignores the duplicate request.
+- **Immutable Audit Trail:** Mongoose pre-hooks strictly block any modifications (`updateOne`), replacements (`findOneAndReplace`), or deletions (`deleteOne`) to ledger entries. History cannot be rewritten.
+- **Soft Deletion:** Accounts can be closed, but never deleted from the database. This preserves the mathematical integrity of historical transactions. An account can only be closed if its balance is exactly `₹0.00`.
 
-## Installation & Setup
+### 💻 Premium Frontend Interface
+A sleek, responsive, and highly interactive user interface designed to feel like a modern, enterprise-grade fintech platform.
+- **Public & Private Zones:** The app utilizes CSS custom variables to split the aesthetic into two zones: a "Light/Aurora" zone for public marketing/auth pages, and a strict "Dark Mode" zone for private financial dashboards.
+- **React Context Auth:** Global state management utilizing `AuthContext` to seamlessly protect private routes (`PrivateLayout`) and manage JWT tokens.
+- **Axios Interceptors:** Automatic injection of Authorization headers and global error handling for network requests.
+
+### 📧 Automated Notification System
+A non-blocking background email service powered by `Nodemailer` and Gmail OAuth2/App Passwords. Users receive instant email receipts for:
+1. **Registration:** Welcome emails upon creating an account.
+2. **Opening Accounts:** Alerts when a new sub-ledger/account is opened.
+3. **Fund Transfers:** Detailed receipts of completed or failed transactions.
+
+---
+
+## 🛠️ Technology Stack
+
+| Domain | Technologies |
+| :--- | :--- |
+| **Frontend** | React 18, Vite, React Router DOM, Axios, Lucide-React, Vanilla CSS3 |
+| **Backend** | Node.js, Express.js, Cors, Cookie-Parser |
+| **Database** | MongoDB (Replica Sets required), Mongoose ORM |
+| **Security** | JSON Web Tokens (JWT), Bcrypt.js, TTL Indexes |
+| **Services** | Nodemailer |
+
+---
+
+## 🚀 Installation & Local Setup
 
 ### Prerequisites
-- Node.js installed
-- A MongoDB cluster with **Replica Sets** enabled (Required for MongoDB ACID Transactions. MongoDB Atlas uses replica sets by default).
+- Node.js installed (v16+)
+- A MongoDB cluster with **Replica Sets** enabled (Required for MongoDB ACID Transactions. Note: *MongoDB Atlas free tier uses replica sets by default*).
 
 ### 1. Clone the repository
 ```bash
@@ -39,6 +58,7 @@ cd backend-ledger
 ```
 
 ### 2. Backend Setup
+Navigate into the backend directory and install dependencies:
 ```bash
 cd backend
 npm install
@@ -48,8 +68,10 @@ Create a `.env` file in the `backend/` directory:
 PORT=3000
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_super_secret_jwt_key
-EMAIL_USER=your_gmail_address
-EMAIL_APP_PASSWORD=your_gmail_app_password
+
+# Email Configuration (Use Gmail App Passwords)
+EMAIL_USER=your_gmail_address@gmail.com
+EMAIL_APP_PASSWORD=your_16_digit_app_password
 ```
 Start the backend server:
 ```bash
@@ -57,31 +79,39 @@ npm run dev
 ```
 
 ### 3. Frontend Setup
-In a new terminal window:
+Open a **new terminal window**, navigate to the frontend directory, and start the Vite dev server:
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-The frontend will start at `http://localhost:5173`.
+The frontend will start instantly at `http://localhost:5173`.
 
-## API Endpoints Overview
+---
+
+## 📖 API Endpoints Reference
 
 ### Authentication (`/api/auth`)
-- `POST /register` - Register a new user
-- `POST /login` - Authenticate and receive a JWT
-- `POST /logout` - Invalidate the current session token
+- `POST /register` - Register a new user and trigger a welcome email.
+- `POST /login` - Authenticate credentials and issue a JWT.
+- `POST /logout` - Invalidate the current session using a MongoDB TTL Blacklist.
 
 ### Accounts (`/api/accounts`)
-- `POST /` - Create a new account
-- `GET /` - Retrieve all accounts for the logged-in user
-- `GET /balance/:accountId` - Get the dynamically calculated real-time balance
-- `DELETE /:accountId` - Soft delete (close) an account with zero balance
+- `POST /` - Open a new financial account/ledger (triggers email).
+- `GET /` - Retrieve all accounts belonging to the authenticated user.
+- `GET /balance/:accountId` - Dynamically calculate and fetch the real-time balance.
+- `DELETE /:accountId` - Soft delete (close) an account. *Fails if balance > 0.*
 
 ### Transactions (`/api/transactions`)
-- `GET /` - Retrieve all immutable ledger entries for the user
-- `POST /` - Initiate a secure fund transfer between two accounts
-- `POST /system/initial-funds` - System-level endpoint to seed an account with initial funds
+- `GET /` - Retrieve a full array of the user's immutable ledger entries (Credits/Debits).
+- `POST /` - Initiate a secure fund transfer between two accounts.
+  - *Requires Payload:* `{ fromAccount, toAccount, amount, idempotencyKey }`
+- `POST /system/initial-funds` - System-level endpoint to seed an account with initial liquidity.
 
-## License
-ISC
+---
+
+## 🔒 Security Flow: The Token Blacklist
+When a user logs out, their JWT is stored in a `tokenBlackList` MongoDB collection. The `authMiddleware` intercepts all requests and verifies the token against this blacklist. To prevent the database from growing infinitely, the collection utilizes a **Time-To-Live (TTL) Index** (`expireAfterSeconds: 259200`) which automatically permanently deletes the token from the database after 3 days.
+
+---
+*Built with precision for the future of decentralized finance.*

@@ -1,4 +1,5 @@
 const accountModel = require("../models/account.model");
+const emailService = require("../services/email.service");
 
 async function createAccountController(req, res) {
     try {
@@ -19,7 +20,12 @@ async function createAccountController(req, res) {
             name: name || "Standard Account"
         });
 
-        // 3. Send success response
+        // 3. Send email notification (fire and forget)
+        if (user && user.email) {
+            emailService.sendAccountCreationEmail(user.email, user.name, account.name, account._id).catch(console.error);
+        }
+
+        // 4. Send success response
         return res.status(201).json({
             success: true,
             account
