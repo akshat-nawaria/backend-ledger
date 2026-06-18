@@ -6,8 +6,9 @@ const accountRouter = require("../src/routes/account.routes")
 const transactionRouter = require("./routes/transaction.routes")
 const app = express();
 
+const clientOrigin = process.env.CLIENT_URL || "http://localhost:5173";
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: clientOrigin,
     credentials: true
 }));
 app.use(express.json())
